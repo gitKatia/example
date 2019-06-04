@@ -24,6 +24,19 @@ public class ReservationServiceImpl implements ReservationService {
 	public Optional<Reservation> getReservation(long id) {
 		return reservationRepository.findById(id);
 	}
+	
+	@Override
+	public Optional<Reservation> getReservationFor(long id, long routeId, LocalDate date) {
+		Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+		if(reservationOptional.isPresent()) {
+			Reservation reservation= reservationOptional.get();
+			if(reservation.getDate().isEqual(date) && reservation.getRoute().getId() == routeId) {
+				return Optional.of(reservation);
+			}
+			return Optional.empty();
+		}
+		return Optional.empty();
+	}
 
 	@Override
 	public List<Reservation> getAllReservations() {
@@ -33,6 +46,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Map<Long, List<String>> getReservationsFor(long routeId, LocalDate date) {
 		return getAllReservations().stream()
+				.filter(reservation -> reservation.getRoute().getId() == routeId)
 				.filter(reservation -> reservation.getDate().isEqual(date))
 				.collect(Collectors.groupingBy(reservation -> reservation.getStop().getId(),
 						Collectors.mapping(reservation -> childname(reservation), Collectors.toList())));

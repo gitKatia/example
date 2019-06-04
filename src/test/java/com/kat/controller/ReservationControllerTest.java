@@ -77,22 +77,22 @@ public class ReservationControllerTest {
 	}
 
 	@Test
-	public void shouldGetReservationForTheGivenReservationId() {
+	public void shouldGetReservationForTheGivenReservationIdDateAndRouteId() {
 		LocalDate date = now();
 		Reservation reservation = new Reservation();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.of(reservation));
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.of(reservation));
 		ResponseEntity<Reservation> result = reservationController.getReservation(1, date, 1);
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertEquals(reservation, result.getBody());
 	}
 
 	@Test
-	public void shouldGetNoReservationForTheGivenReservationId() {
+	public void shouldGetNoReservationForTheGivenReservationIdAndDateAndRouteId() {
 		LocalDate date = now();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.empty());
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.empty());
 		ResponseEntity<Reservation> result = reservationController.getReservation(1, date, 1);
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 		assertNull(result.getBody());
 	}
@@ -126,7 +126,7 @@ public class ReservationControllerTest {
 	}
 
 	@Test
-	public void shouldNotCreateTheReservationBecauseOfRoutNotFound() {
+	public void shouldNotCreateTheReservationBecauseOfRouteNotFound() {
 		LocalDate date = now();
 		ReservationRequest request = new ReservationRequest();
 		when(routeService.getRoute(anyLong())).thenReturn(Optional.empty());
@@ -182,14 +182,14 @@ public class ReservationControllerTest {
 		Reservation reservation = new Reservation();
 		Stop stop = new Stop();
 		Route route = new Route();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.of(reservation));
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.of(reservation));
 		when(stopService.getStop(anyLong())).thenReturn(Optional.of(stop));
 		when(routeService.getRoute(anyLong())).thenReturn(Optional.of(route));
 		when(reservationService.editReservation(any())).thenReturn(Optional.of(reservation));
 
 		ResponseEntity<Reservation> result = reservationController.updateReservation(request, 1, date, 2);
 
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		verify(stopService).getStop(anyLong());
 		verify(routeService).getRoute(anyLong());
 		verify(reservationService).editReservation(any());
@@ -201,11 +201,11 @@ public class ReservationControllerTest {
 	public void shouldNotUpdateTheReservationBecauseOfReservationNotFound() {
 		LocalDate date = now();
 		ReservationRequest request = new ReservationRequest();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.empty());
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.empty());
 
 		ResponseEntity<Reservation> result = reservationController.updateReservation(request, 1, date, 2);
 
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		verify(stopService, never()).getStop(anyLong());
 		verify(routeService, never()).getRoute(anyLong());
 		verify(reservationService, never()).editReservation(any());
@@ -218,12 +218,12 @@ public class ReservationControllerTest {
 		LocalDate date = now();
 		ReservationRequest request = new ReservationRequest();
 		Reservation reservation = new Reservation();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.of(reservation));
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.of(reservation));
 		when(stopService.getStop(anyLong())).thenReturn(Optional.empty());
 
 		ResponseEntity<Reservation> result = reservationController.updateReservation(request, 1, date, 2);
 
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		verify(stopService).getStop(anyLong());
 		verify(routeService, never()).getRoute(anyLong());
 		verify(reservationService, never()).editReservation(any());
@@ -237,13 +237,13 @@ public class ReservationControllerTest {
 		ReservationRequest request = new ReservationRequest();
 		Reservation reservation = new Reservation();
 		Stop stop = new Stop();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.of(reservation));
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.of(reservation));
 		when(stopService.getStop(anyLong())).thenReturn(Optional.of(stop));
 		when(routeService.getRoute(anyLong())).thenReturn(Optional.empty());
 
 		ResponseEntity<Reservation> result = reservationController.updateReservation(request, 1, date, 2);
 
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		verify(stopService).getStop(anyLong());
 		verify(routeService).getRoute(anyLong());
 		verify(reservationService, never()).editReservation(any());
@@ -255,11 +255,11 @@ public class ReservationControllerTest {
 	public void shouldDeleteReservation() {
 		LocalDate date = now();
 		Reservation reservation = new Reservation();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.of(reservation));
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.of(reservation));
 
 		ResponseEntity<Reservation> result = reservationController.deleteReservation(1, date, 3);
 
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		verify(reservationService).deleteReservation(anyLong());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertEquals(reservation, result.getBody());
@@ -268,11 +268,11 @@ public class ReservationControllerTest {
 	@Test
 	public void shouldNotDeleteReservationBecauseOfReservationNotFound() {
 		LocalDate date = now();
-		when(reservationService.getReservation(anyLong())).thenReturn(Optional.empty());
+		when(reservationService.getReservationFor(anyLong(), anyLong(), any())).thenReturn(Optional.empty());
 
 		ResponseEntity<Reservation> result = reservationController.deleteReservation(1, date, 3);
 
-		verify(reservationService).getReservation(anyLong());
+		verify(reservationService).getReservationFor(anyLong(), anyLong(), any());
 		verify(reservationService, never()).deleteReservation(anyLong());
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 		assertNull(result.getBody());

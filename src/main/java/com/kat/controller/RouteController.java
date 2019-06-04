@@ -45,7 +45,7 @@ public class RouteController {
 	public ResponseEntity<Route> getRoute(@PathVariable("id") long id) {
 		Optional<Route> routeOptional = routeService.getRoute(id);
 		if (!routeOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>(routeOptional.get(), HttpStatus.OK);
 		}

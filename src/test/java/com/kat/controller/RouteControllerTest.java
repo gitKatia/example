@@ -31,6 +31,12 @@ public class RouteControllerTest {
 	private RouteController routeController;
 
 	@Test
+	public void shouldLoadRoutes() {
+		routeController.init();
+		verify(routeService).loadRoutes();
+	}
+
+	@Test
 	public void shouldGetAllRoutes() {
 		List<Route> routes = new ArrayList<>();
 		Route route1 = new Route();
@@ -73,7 +79,7 @@ public class RouteControllerTest {
 		ResponseEntity<Route> result = routeController.getRoute(1);
 
 		verify(routeService).getRoute(anyLong());
-		assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 		assertNull(result.getBody());
 	}
 

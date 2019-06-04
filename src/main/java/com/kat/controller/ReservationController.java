@@ -54,7 +54,7 @@ public class ReservationController {
 	public ResponseEntity<Reservation> getReservation(@PathVariable("route_id") long routeId,
 			@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") LocalDate date,
 			@PathVariable("reservation_id") long reservationId) {
-		Optional<Reservation> reservationOptional = reservationService.getReservation(reservationId);
+		Optional<Reservation> reservationOptional = reservationService.getReservationFor(reservationId, routeId, date);
 		if (reservationOptional.isPresent()) {
 			return ResponseEntity.ok().body(reservationOptional.get());
 		} else {
@@ -92,7 +92,7 @@ public class ReservationController {
 			@PathVariable("route_id") long routeId,
 			@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") LocalDate date,
 			@PathVariable("reservation_id") long reservationId) {
-		Optional<Reservation> reservationOptional = reservationService.getReservation(reservationId);
+		Optional<Reservation> reservationOptional = reservationService.getReservationFor(reservationId, routeId, date);
 		if (reservationOptional.isPresent()) {
 			Optional<Stop> stopOptional = stopService.getStop(request.getStopId());
 			if (!stopOptional.isPresent()) {
@@ -119,7 +119,7 @@ public class ReservationController {
 	public ResponseEntity<Reservation> deleteReservation(@PathVariable("route_id") long routeId,
 			@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") LocalDate date,
 			@PathVariable("reservation_id") long reservationId) {
-		Optional<Reservation> reservationOptional = reservationService.getReservation(reservationId);
+		Optional<Reservation> reservationOptional = reservationService.getReservationFor(reservationId, routeId, date);
 		if (reservationOptional.isPresent()) {
 			reservationService.deleteReservation(reservationId);
 			Reservation deletedReservation = reservationOptional.get();

@@ -10,6 +10,7 @@ import com.kat.model.Reservation;
 public interface ReservationService {
 	
 	Optional<Reservation> getReservation(long id);
+	Optional<Reservation> getReservationFor(long id, long routeId, LocalDate date);
 	List<Reservation> getAllReservations();
 	Map<Long,List<String>> getReservationsFor(long routeId, LocalDate date);
 	Reservation createReservation(Reservation reservation);
