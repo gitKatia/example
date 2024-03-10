@@ -1,4 +1,4 @@
-# Getting Started
+# Getting Started 
 
 ### The application uses H2 embedded database
 * You can access the H2 console at http://localhost:9092/h2-console
