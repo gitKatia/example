@@ -9,6 +9,13 @@ pipeline {
       stage ('Build') {
          steps {
             echo "Building ..."
+            sh 'mvn clean package'
+         }
+         post {
+            success {
+               echo 'Archiving artifacts'
+               archiveArtifacts artifacts:'*/targett/*.jar'
+            }
          }
       }
       stage ('Deploy') {
