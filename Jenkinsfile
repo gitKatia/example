@@ -21,7 +21,7 @@ pipeline {
       stage ('Deploy') {
          steps {
             echo "Deploying ...."
-            sh java -jar schoolbus-reservation-system-0.0.1-SNAPSHOT.jar"
+            sh 'java -jar schoolbus-reservation-system-0.0.1-SNAPSHOT.jar'
          }
       }
    }
