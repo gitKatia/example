@@ -20,7 +20,8 @@ pipeline {
       }
       stage ('Deploy') {
          steps {
-            echo "Code deployed."
+            echo "Deploying ...."
+            sh java -jar **/target/*.jar"
          }
       }
    }
